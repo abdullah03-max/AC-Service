@@ -41,9 +41,9 @@ const InvoicePage = () => {
                 ❄️
               </div>
               <div>
-                <p className="font-bold text-xl">Full Care AC Tech</p>
+                <p className="font-bold text-xl">Cool Care AC Tech</p>
                 <p className="text-white/50 text-sm">Professional AC Services</p>
-                <p className="text-white/30 text-xs mt-0.5">Karachi, Pakistan · 0300-FULLCARE</p>
+                <p className="text-white/30 text-xs mt-0.5">Pakistan · 0300-FULLCARE</p>
               </div>
             </div>
             <div className="text-right">
@@ -125,7 +125,7 @@ const InvoicePage = () => {
 
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-            <p className="font-bold text-slate-700 mb-1">Thank you for choosing Full Care AC Tech!</p>
+            <p className="font-bold text-slate-700 mb-1">Thank you for choosing Cool Care AC Tech!</p>
             <p className="text-xs text-slate-400">For queries: info@fullcareac.com · 0300-FULLCARE</p>
           </div>
         </div>

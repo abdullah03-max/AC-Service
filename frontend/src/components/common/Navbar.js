@@ -68,7 +68,7 @@ const Navbar = () => {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M12 7V4M8 7V5M16 7V5"/><circle cx="12" cy="12" r="2"/><path d="M6 12h2M16 12h2"/></svg>
             </div>
             <div>
-              <span className="font-display font-bold text-white text-base leading-none block">Full Care</span>
+              <span className="font-display font-bold text-white text-base leading-none block">Cool Care</span>
               <span className="text-[10px] text-[#00d4ff] font-bold tracking-widest uppercase leading-none">AC Tech</span>
             </div>
           </Link>

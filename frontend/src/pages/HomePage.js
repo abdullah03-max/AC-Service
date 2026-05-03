@@ -18,7 +18,7 @@ const HomePage = () => {
   const stats = [{ v: '5,000+', l: 'Customers Served' }, { v: '50+', l: 'Expert Technicians' }, { v: '8+', l: 'Years Experience' }, { v: '4.9★', l: 'Average Rating' }];
   const features = [
     { icon: '🛡️', title: 'Certified Experts', desc: 'All technicians are trained, certified, and background-checked professionals.' },
-    { icon: '⚡', title: 'Same Day Service', desc: 'Emergency and same-day bookings available across Karachi.' },
+    { icon: '⚡', title: 'Same Day Service', desc: 'Emergency and same-day bookings available nationwide.' },
     { icon: '💎', title: 'Quality Guaranteed', desc: '30-day service warranty on all AC jobs. Not satisfied? We come back free.' },
     { icon: '📊', title: 'Transparent Pricing', desc: 'Fixed prices shown upfront. No hidden charges, ever.' },
   ];
@@ -41,7 +41,7 @@ const HomePage = () => {
           <div>
             <div className="inline-flex items-center gap-2 bg-[#00d4ff]/10 border border-[#00d4ff]/20 rounded-full px-4 py-1.5 text-sm text-[#00d4ff] mb-6">
               <span className="w-1.5 h-1.5 bg-[#00d4ff] rounded-full animate-pulse" />
-              Karachi's #1 AC Service Provider
+              Premium AC Service Experience
             </div>
             <h1 className="font-display text-5xl sm:text-6xl font-bold leading-[1.05] mb-6">
               <span className="text-white">Expert AC</span><br/>

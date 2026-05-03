@@ -207,7 +207,7 @@ const BookingPage = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ scheduledDate:'', scheduledTime:'', address: user?.address || '', city:'Karachi', acType:'Split', acBrand:'', acTons:'', paymentMethod:'cash', notes:'' });
+  const [form, setForm] = useState({ scheduledDate:'', scheduledTime:'', address: user?.address || '', city:'', acType:'Split', acBrand:'', acTons:'', paymentMethod:'cash', notes:'' });
   const [showMap, setShowMap] = useState(false);
   const [mapCenter, setMapCenter] = useState([30.3753, 69.3451]);
   const [geoPermission, setGeoPermission] = useState('unknown');

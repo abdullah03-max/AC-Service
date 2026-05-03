@@ -34,21 +34,21 @@ const LoginPage = () => {
           <div className="w-9 h-9 rounded-xl bg-[#00d4ff]/10 border border-[#00d4ff]/30 flex items-center justify-center text-[#00d4ff]">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M12 7V4"/><circle cx="12" cy="12" r="2"/></svg>
           </div>
-          <span className="font-display font-bold text-white">Full Care AC Tech</span>
+          <span className="font-display font-bold text-white">Cool Care AC Tech</span>
         </div>
         <div className="relative">
           <h2 className="font-display text-5xl font-bold text-white leading-tight mb-5">
             Your AC.<br/>
             <span style={{color:'#00d4ff'}}>Our Expertise.</span>
           </h2>
-          <p className="text-white/40 leading-relaxed max-w-xs">Trusted by thousands of homes and businesses across Karachi for professional AC care.</p>
+          <p className="text-white/40 leading-relaxed max-w-xs">Trusted by thousands of homes and businesses across Pakistan for professional AC care.</p>
           <div className="grid grid-cols-2 gap-3 mt-8">
             {['5,000+ Customers','50+ Technicians','8+ Years','4.9★ Rating'].map(s => (
               <div key={s} className="glass-card px-4 py-3 text-sm text-white/60">{s}</div>
             ))}
           </div>
         </div>
-        <p className="relative text-white/20 text-xs">© 2024 Full Care AC Tech</p>
+        <p className="relative text-white/20 text-xs">© 2024 Cool Care AC Tech</p>
       </div>
 
       {/* Right panel */}
