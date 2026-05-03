@@ -13,7 +13,6 @@ const STATUS_OPTIONS = [
   { id:'offline', label:'Offline', color:'slate', dot:'#64748b' },
 ];
 
-const KARACHI_BASE = { lat: 24.8607, lng: 67.0011 };
 
 const TechnicianDashboard = () => {
   const { user } = useAuth();
