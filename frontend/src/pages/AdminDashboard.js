@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import TechnicianLiveMap from '../components/admin/TechnicianLiveMap';
-import { analyticsAPI, bookingsAPI, techniciansAPI, servicesAPI, inventoryAPI } from '../services/api';
+import { analyticsAPI, bookingsAPI, techniciansAPI, authAPI, servicesAPI, inventoryAPI } from '../services/api';
 import { StatusBadge, StatCard, Modal, Spinner, EmptyState } from '../components/common';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import toast from 'react-hot-toast';
