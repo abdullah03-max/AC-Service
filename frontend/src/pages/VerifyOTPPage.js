@@ -26,7 +26,7 @@ const VerifyOTPPage = () => {
     } else if (state.deliveredViaEmail === false) {
       setBanner('Check the backend console for the 4-digit verification code.');
     }
-  }, []);
+  }, [location.state]);
 
   const send = async () => {
     try {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { techniciansAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 
@@ -50,7 +50,7 @@ const TechnicianLocationUpdater = () => {
     setTimeout(finish, 12000);
   });
 
-  const updateLocation = async () => {
+  const updateLocation = useCallback(async () => {
     setLoading(true);
     try {
       const pos = await getBestCurrentLocation();
@@ -87,7 +87,7 @@ const TechnicianLocationUpdater = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Auto-update location every 60 seconds if enabled
   useEffect(() => {
@@ -98,7 +98,7 @@ const TechnicianLocationUpdater = () => {
 
     const interval = setInterval(updateLocation, 60000);
     return () => clearInterval(interval);
-  }, [autoUpdate]);
+  }, [autoUpdate, updateLocation]);
 
   const getAccuracyColor = (accuracy) => {
     if (accuracy < 10) return 'text-emerald-400';

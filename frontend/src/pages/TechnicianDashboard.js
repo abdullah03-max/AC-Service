@@ -23,8 +23,6 @@ const TechnicianDashboard = () => {
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [myStatus, setMyStatus] = useState('available');
   const [tab, setTab] = useState('assigned');
-  const [location, setLocation] = useState(KARACHI_BASE);
-  const [locationUpdating, setLocationUpdating] = useState(false);
   const [updatingJob, setUpdatingJob] = useState(null);
 
   const loadData = useCallback(async () => {
@@ -36,7 +34,6 @@ const TechnicianDashboard = () => {
       ]);
       setProfile(profileRes.data.data);
       setMyStatus(profileRes.data.data.currentStatus);
-      setLocation(profileRes.data.data.currentLocation || KARACHI_BASE);
       setBookings(bookingsRes.data.data);
     } catch {
       toast.error('Failed to load data');
@@ -73,39 +70,11 @@ const TechnicianDashboard = () => {
     }
   };
 
-  const handleUpdateLocation = async () => {
-    if (!navigator.geolocation) {
-      toast.error('Geolocation is not supported by your browser');
-      return;
-    }
-    
-    setLocationUpdating(true);
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        try {
-          const newLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-          await techniciansAPI.updateLocation(newLoc);
-          setLocation(newLoc);
-          toast.success('📍 Live Location updated!');
-        } catch {
-          toast.error('Location update failed on server');
-        } finally {
-          setLocationUpdating(false);
-        }
-      },
-      (err) => {
-        setLocationUpdating(false);
-        toast.error('Failed to get GPS location. Please allow location access.');
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-  };
 
   const assigned = bookings.filter(b => ['assigned','in_progress'].includes(b.status));
   const completed = bookings.filter(b => b.status === 'completed');
   const shown = tab === 'assigned' ? assigned : completed;
 
-  const currentStatusOption = STATUS_OPTIONS.find(s => s.id === myStatus);
 
   if (loading) return (
     <div className="min-h-screen mesh-bg flex items-center justify-center">
