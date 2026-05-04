@@ -14,6 +14,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import TechnicianDashboard from './pages/TechnicianDashboard';
 import BookingDetailPage from './pages/BookingDetailPage';
 import InvoicePage from './pages/InvoicePage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 const ProtectedRoute = ({ children, roles }) => {
   const { user, initializing } = useAuth();
@@ -55,6 +57,8 @@ function AppRoutes() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify" element={<VerifyOTPPage />} />
       <Route path="/services" element={<ServicesPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/resetpassword/:token" element={<ResetPasswordPage />} />
       <Route path="/home" element={<DashboardRedirect />} />
 
       <Route path="/dashboard" element={<ProtectedRoute roles={['user']}><UserDashboard /></ProtectedRoute>} />

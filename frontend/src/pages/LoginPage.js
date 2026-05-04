@@ -88,6 +88,11 @@ const LoginPage = () => {
                   {showPass ? '🙈' : '👁'}
                 </button>
               </div>
+              <div className="flex justify-end mt-2">
+                <Link to="/forgot-password" size="sm" className="text-xs text-[#00d4ff] hover:underline">
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
             <button type="submit" disabled={loading} className="btn-primary w-full py-3">
               {loading ? <><div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" /> Signing in...</> : 'Sign In →'}

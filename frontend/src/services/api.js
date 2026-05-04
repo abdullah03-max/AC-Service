@@ -34,6 +34,8 @@ export const authAPI = {
   getUsers: () => API.get('/auth/users'),
   deleteUser: (id) => API.delete(`/auth/users/${id}`),
   toggleUserStatus: (id) => API.put(`/auth/users/${id}/status`),
+  forgotPassword: (email) => API.post('/auth/forgotpassword', { email }),
+  resetPassword: (token, password) => API.put(`/auth/resetpassword/${token}`, { password }),
 };
 
 // Services
