@@ -91,8 +91,8 @@ const Navbar = () => {
                     {unreadCount > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-[#0a0f1e]"></span>}
                   </button>
                   {notifOpen && (
-                    <div className="absolute right-0 mt-2 w-80 bg-[#111827] border border-white/10 rounded-2xl shadow-2xl py-2 z-50 max-h-[80vh] flex flex-col">
-                      <div className="px-4 py-3 border-b border-white/10 flex justify-between items-center bg-[#0a0f1e]">
+                    <div className="fixed inset-x-4 top-20 md:absolute md:right-0 md:top-full md:mt-2 md:w-80 bg-[#111827]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl py-2 z-[60] max-h-[70vh] flex flex-col">
+                      <div className="px-4 py-3 border-b border-white/10 flex justify-between items-center bg-white/5">
                         <h3 className="text-white font-bold text-sm">Notifications</h3>
                         {unreadCount > 0 && <button onClick={handleMarkAllRead} className="text-xs text-[#00d4ff] hover:underline">Mark all read</button>}
                       </div>
@@ -114,16 +114,16 @@ const Navbar = () => {
 
                 <div className="relative">
                   <button onClick={() => { setUserMenuOpen(!userMenuOpen); setNotifOpen(false); }}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
+                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
                   <div className="w-7 h-7 rounded-lg bg-[#00d4ff]/20 flex items-center justify-center text-[#00d4ff] text-xs font-bold">
                     {user.name?.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm text-white/80 hidden sm:block max-w-20 truncate">{user.name?.split(' ')[0]}</span>
-                  <span className="hidden sm:block text-xs bg-[#00d4ff]/10 text-[#00d4ff] border border-[#00d4ff]/20 px-1.5 py-0.5 rounded-md capitalize">{user.role}</span>
+                  <span className="text-sm text-white/80 hidden lg:block max-w-20 truncate">{user.name?.split(' ')[0]}</span>
+                  <span className="hidden lg:block text-[10px] bg-[#00d4ff]/10 text-[#00d4ff] border border-[#00d4ff]/20 px-1.5 py-0.5 rounded-md capitalize font-bold">{user.role}</span>
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-52 bg-[#111827] border border-white/10 rounded-2xl shadow-2xl py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-52 bg-[#111827]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl py-2 z-50">
                     <div className="px-4 py-2.5 border-b border-white/10">
                       <p className="text-sm font-semibold text-white">{user.name}</p>
                       <p className="text-xs text-white/40">{user.email}</p>
@@ -153,33 +153,37 @@ const Navbar = () => {
           </div>
         </div>
 
+        {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="md:hidden py-4 border-t border-white/10 flex flex-col gap-1">
-            {[['/', 'Home'], ['/services', 'Services']].map(([to, label]) => (
-              <Link key={to} to={to} className={`px-4 py-3 text-sm font-medium rounded-xl transition-all ${isActive(to) ? 'bg-[#00d4ff]/10 text-[#00d4ff]' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{label}</Link>
-            ))}
-            {user ? (
-              <div className="mt-2 pt-4 border-t border-white/5 px-4 space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#00d4ff]/20 flex items-center justify-center text-[#00d4ff] font-bold">
-                    {user.name?.charAt(0).toUpperCase()}
+          <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-[#0a0f1e]/80 backdrop-blur-2xl border-t border-white/10 animate-in slide-in-from-top duration-300">
+            <div className="p-4 flex flex-col gap-1 h-full">
+              {[['/', 'Home'], ['/services', 'Services']].map(([to, label]) => (
+                <Link key={to} to={to} className={`px-4 py-3.5 text-base font-medium rounded-2xl transition-all ${isActive(to) ? 'bg-[#00d4ff]/10 text-[#00d4ff] border border-[#00d4ff]/20' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{label}</Link>
+              ))}
+              {user ? (
+                <div className="mt-auto mb-8 space-y-4">
+                  <div className="glass-card p-4 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#00d4ff]/20 flex items-center justify-center text-[#00d4ff] text-xl font-bold border border-[#00d4ff]/30">
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-base font-bold text-white">{user.name}</p>
+                      <p className="text-xs text-white/40">{user.email}</p>
+                    </div>
+                    <span className="text-[10px] bg-[#00d4ff]/10 text-[#00d4ff] border border-[#00d4ff]/20 px-2 py-1 rounded-lg capitalize font-bold">{user.role}</span>
                   </div>
-                  <div>
-                    <p className="text-sm font-bold text-white">{user.name}</p>
-                    <p className="text-xs text-white/40">{user.email}</p>
+                  <div className="flex flex-col gap-2">
+                    <Link to={getDashboardLink()} className="w-full py-4 text-center font-bold text-white glass-card hover:bg-white/5 transition-all">Dashboard</Link>
+                    <button onClick={handleLogout} className="w-full py-4 text-center font-bold text-red-400 bg-red-500/5 border border-red-500/10 rounded-2xl hover:bg-red-500/10 transition-all">Logout</button>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <Link to={getDashboardLink()} className="py-2.5 text-sm text-white/70 hover:text-white transition-colors">Dashboard</Link>
-                  <button onClick={handleLogout} className="py-2.5 text-sm text-red-400 text-left transition-colors">Logout</button>
+              ) : (
+                <div className="mt-auto mb-8 flex flex-col gap-3">
+                  <Link to="/login" className="w-full py-4 text-center font-bold text-white glass-card">Login</Link>
+                  <Link to="/register" className="btn-primary w-full py-4 text-center font-bold">Get Started</Link>
                 </div>
-              </div>
-            ) : (
-              <div className="mt-4 flex flex-col gap-2 px-2">
-                <Link to="/login" className="btn-ghost w-full py-3">Login</Link>
-                <Link to="/register" className="btn-primary w-full py-3">Get Started</Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
       </div>
