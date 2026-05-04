@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: process.env.REACT_APP_API_URL || '/api' });
+const API = axios.create({ baseURL: process.env.REACT_APP_API_URL || 'https://ac-service-ecru.vercel.app/api' });
 
 // Attach JWT token to every request
 API.interceptors.request.use((config) => {
