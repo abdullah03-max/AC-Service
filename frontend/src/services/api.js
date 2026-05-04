@@ -54,6 +54,7 @@ export const bookingsAPI = {
   assign: (id, data) => API.put(`/bookings/${id}/assign`, data),
   cancel: (id) => API.put(`/bookings/${id}/cancel`),
   getRecommendations: () => API.get('/bookings/recommendations'),
+  submitFeedback: (id, data) => API.put(`/bookings/${id}/feedback`, data),
 };
 
 // Technicians

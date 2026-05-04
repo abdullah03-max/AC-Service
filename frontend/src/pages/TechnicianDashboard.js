@@ -155,6 +155,7 @@ const TechnicianDashboard = () => {
               {[
                 { id:'assigned', label:`Assigned (${assigned.length})` },
                 { id:'completed', label:`Completed (${completed.length})` },
+                { id:'reviews', label:`Reviews` },
               ].map(t => (
                 <button key={t.id} onClick={() => setTab(t.id)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${tab === t.id ? 'bg-[#00d4ff] text-[#0a0f1e]' : 'text-white/50 hover:text-white'}`}>
@@ -163,8 +164,40 @@ const TechnicianDashboard = () => {
               ))}
             </div>
 
-            {/* Job cards */}
-            {shown.length === 0 ? (
+            {/* Job cards or Reviews */}
+            {tab === 'reviews' ? (
+              <div className="space-y-4">
+                {bookings.filter(b => b.rating).length === 0 ? (
+                  <div className="glass-card p-8">
+                    <EmptyState
+                      icon="⭐"
+                      title="No reviews yet"
+                      description="User feedback will appear here once you complete jobs."
+                    />
+                  </div>
+                ) : (
+                  bookings.filter(b => b.rating).map(b => (
+                    <div key={b._id} className="glass-card p-5">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <span key={i} className={i < b.rating ? "text-amber-400" : "text-white/10"}>★</span>
+                          ))}
+                        </div>
+                        <span className="text-[10px] text-white/20 uppercase font-bold tracking-widest">{new Date(b.completedAt).toLocaleDateString()}</span>
+                      </div>
+                      <p className="text-white italic mb-3">"{b.review}"</p>
+                      <div className="flex items-center gap-2 pt-3 border-t border-white/5">
+                        <div className="w-6 h-6 rounded bg-[#00d4ff]/10 flex items-center justify-center text-[10px] text-[#00d4ff] font-bold">
+                          {b.user?.name?.charAt(0)}
+                        </div>
+                        <p className="text-xs text-white/40">{b.user?.name} · {b.service?.name}</p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            ) : shown.length === 0 ? (
               <div className="glass-card p-8">
                 <EmptyState
                   icon={tab === 'assigned' ? '📋' : '✅'}

@@ -33,6 +33,22 @@ const BookingDetailPage = () => {
     } finally { setCancelling(false); }
   };
 
+  const [rating, setRating] = useState(5);
+  const [review, setReview] = useState('');
+  const [submittingFeedback, setSubmittingFeedback] = useState(false);
+
+  const handleFeedback = async (e) => {
+    e.preventDefault();
+    setSubmittingFeedback(true);
+    try {
+      await bookingsAPI.submitFeedback(id, { rating, review });
+      toast.success('Thank you for your feedback!');
+      setBooking(p => ({ ...p, rating, review }));
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to submit');
+    } finally { setSubmittingFeedback(false); }
+  };
+
   if (loading) return (
     <div className="min-h-screen mesh-bg flex items-center justify-center">
       <Navbar />
@@ -168,6 +184,58 @@ const BookingDetailPage = () => {
                     <p className="text-sm text-white/40">📞 {booking.technician?.user?.phone}</p>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Feedback Section */}
+            {booking.status === 'completed' && (
+              <div className="glass-card p-5">
+                <h3 className="font-display font-semibold text-white mb-4">🌟 Service Feedback</h3>
+                
+                {booking.rating ? (
+                  <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <div className="flex items-center gap-1 mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <span key={i} className={i < booking.rating ? "text-amber-400" : "text-white/10"}>★</span>
+                      ))}
+                    </div>
+                    <p className="text-sm text-white/70 italic">"{booking.review}"</p>
+                  </div>
+                ) : user?.role === 'user' ? (
+                  <form onSubmit={handleFeedback} className="space-y-4">
+                    <div>
+                      <label className="block text-xs text-white/40 mb-2 uppercase font-medium">Your Rating</label>
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => setRating(s)}
+                            className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg transition-all ${rating >= s ? 'bg-amber-400/20 text-amber-400 border-amber-400/30' : 'bg-white/5 text-white/20 border-white/10'} border`}
+                          >
+                            ★
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs text-white/40 mb-2 uppercase font-medium">Your Experience</label>
+                      <textarea
+                        value={review}
+                        onChange={(e) => setReview(e.target.value)}
+                        placeholder="Tell us how was the service..."
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[#00d4ff] outline-none transition-all resize-none"
+                        rows="3"
+                        required
+                      ></textarea>
+                    </div>
+                    <button type="submit" disabled={submittingFeedback} className="btn-primary w-full py-2.5 text-sm">
+                      {submittingFeedback ? 'Submitting...' : 'Submit Feedback'}
+                    </button>
+                  </form>
+                ) : (
+                  <p className="text-sm text-white/20 italic text-center py-4">Waiting for user feedback...</p>
+                )}
               </div>
             )}
           </div>

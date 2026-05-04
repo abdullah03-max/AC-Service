@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const COLORS = ['#00d4ff','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4'];
-const TABS = ['Overview','Bookings','Technicians','Users','Live Location','Services','Inventory'];
+const TABS = ['Overview','Bookings','Technicians','Users','Live Location','Services','Inventory','Reviews'];
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -812,6 +812,48 @@ const AdminDashboard = () => {
                 </tbody>
               </table>
               {inventory.length === 0 && <EmptyState icon="📦" title="No inventory items" description="Add parts and supplies" />}
+            </div>
+          </div>
+        )}
+
+        {/* REVIEWS */}
+        {tab === 'Reviews' && (
+          <div>
+            <h2 className="font-display font-bold text-xl text-white mb-5">User Reviews ({bookings.filter(b => b.rating).length})</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {bookings.filter(b => b.rating).map(b => (
+                <div key={b._id} className="glass-card p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <span key={i} className={i < b.rating ? "text-amber-400" : "text-white/10"}>★</span>
+                      ))}
+                    </div>
+                    <span className="text-[10px] text-white/20 uppercase font-bold tracking-widest">{new Date(b.completedAt).toLocaleDateString()}</span>
+                  </div>
+                  <p className="text-white italic mb-3">"{b.review}"</p>
+                  <div className="space-y-2 pt-3 border-t border-white/5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-white/30">Customer:</span>
+                      <span className="text-white/70">{b.user?.name}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-white/30">Technician:</span>
+                      <span className="text-[#00d4ff] font-medium">{b.technician?.user?.name || 'N/A'}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-white/30">Service:</span>
+                      <span className="text-white/70">{b.service?.name}</span>
+                    </div>
+                  </div>
+                  <Link to={`/booking/${b._id}`} className="mt-4 block text-center text-xs text-[#00d4ff] hover:underline">View Booking Details</Link>
+                </div>
+              ))}
+              {bookings.filter(b => b.rating).length === 0 && (
+                <div className="col-span-full">
+                  <EmptyState icon="⭐" title="No reviews yet" description="User feedback will appear here once services are rated." />
+                </div>
+              )}
             </div>
           </div>
         )}

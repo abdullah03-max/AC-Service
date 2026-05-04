@@ -3,6 +3,7 @@ const Service = require('../models/Service');
 const User = require('../models/User');
 const Technician = require('../models/Technician');
 const Inventory = require('../models/Inventory');
+const emailService = require('../utils/emailService');
 
 // @desc Get all bookings (admin) / user's bookings
 // @route GET /api/bookings
@@ -90,6 +91,11 @@ exports.createBooking = async (req, res, next) => {
     );
 
     const populated = await booking.populate('service', 'name category price');
+    
+    // Send Email Notification
+    const user = await User.findById(req.user.id);
+    emailService.sendBookingConfirmation(user, populated);
+
     res.status(201).json({ success: true, data: populated });
   } catch (err) { next(err); }
 };
@@ -147,6 +153,12 @@ exports.updateBookingStatus = async (req, res, next) => {
     }
 
     await booking.save();
+
+    // Send Email Notification for status update
+    const userForEmail = await User.findById(booking.user);
+    const populatedBooking = await booking.populate('service', 'name');
+    emailService.sendBookingStatusUpdate(userForEmail, populatedBooking, status);
+
     res.json({ success: true, data: booking });
   } catch (err) { next(err); }
 };
@@ -176,6 +188,12 @@ exports.assignTechnician = async (req, res, next) => {
         $push: { notifications: { message: `You have been assigned a new job: #${booking.bookingNumber}.`, type: 'info' } }
       });
     }
+    
+    // Send Email Notification to User
+    const userForEmail = await User.findById(booking.user);
+    const populatedBooking = await booking.populate('service', 'name');
+    const techWithUser = await tech.populate('user', 'name phone');
+    emailService.sendBookingStatusUpdate(userForEmail, populatedBooking, 'assigned', techWithUser);
 
     res.json({ success: true, data: booking });
   } catch (err) { next(err); }
@@ -231,5 +249,46 @@ exports.getRecommendations = async (req, res, next) => {
           : 'Explore our popular services.',
       },
     });
+  } catch (err) { next(err); }
+};
+
+// @desc Submit feedback for a completed booking
+// @route PUT /api/bookings/:id/feedback
+exports.submitFeedback = async (req, res, next) => {
+  try {
+    const { rating, review } = req.body;
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) return res.status(404).json({ success: false, message: 'Booking not found' });
+    
+    // Only the user who made the booking can submit feedback
+    if (booking.user.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    if (booking.status !== 'completed') {
+      return res.status(400).json({ success: false, message: 'Can only provide feedback for completed services' });
+    }
+
+    if (booking.rating) {
+      return res.status(400).json({ success: false, message: 'Feedback already submitted' });
+    }
+
+    booking.rating = rating;
+    booking.review = review;
+    await booking.save();
+
+    // Update technician aggregate rating
+    if (booking.technician) {
+      const tech = await Technician.findById(booking.technician);
+      if (tech) {
+        const totalRating = tech.rating * tech.totalReviews + rating;
+        tech.totalReviews += 1;
+        tech.rating = (totalRating / tech.totalReviews).toFixed(1);
+        await tech.save();
+      }
+    }
+
+    res.json({ success: true, data: booking });
   } catch (err) { next(err); }
 };
