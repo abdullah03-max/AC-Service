@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import AdminLoginPage from './pages/AdminLoginPage';
 import RegisterPage from './pages/RegisterPage';
 import VerifyOTPPage from './pages/VerifyOTPPage';
 import ServicesPage from './pages/ServicesPage';
@@ -31,7 +32,12 @@ const ProtectedRoute = ({ children, roles }) => {
     );
   }
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    if (roles && roles.includes('admin')) {
+      return <Navigate to="/admin/login" replace />;
+    }
+    return <Navigate to="/login" replace />;
+  }
 
   if (roles && !roles.includes(user.role)) {
     const redirect = user.role === 'admin' ? '/admin' : user.role === 'technician' ? '/technician' : '/dashboard';
@@ -54,6 +60,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify" element={<VerifyOTPPage />} />
       <Route path="/services" element={<ServicesPage />} />

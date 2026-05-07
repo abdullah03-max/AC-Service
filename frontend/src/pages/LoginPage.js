@@ -18,7 +18,6 @@ const LoginPage = () => {
 
 
   const demos = [
-    { label: 'Admin', email: 'admin@fullcareac.com', password: 'admin123', color: '#f59e0b' },
     { label: 'User', email: 'user@test.com', password: 'user1234', color: '#00d4ff' },
     { label: 'Tech', email: 'bilal@tech.com', password: 'tech1234', color: '#10b981' },
   ];

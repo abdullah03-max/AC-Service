@@ -24,7 +24,7 @@ const StatusIcon = (status) => {
 };
 
 const TechnicianDetailModal = ({ tech, onClose }) => {
-  if (!tech) return null;
+  if (!tech || !tech.user) return null;
 
   const lat = Number(tech.currentLocation?.lat);
   const lng = Number(tech.currentLocation?.lng);
@@ -38,7 +38,7 @@ const TechnicianDetailModal = ({ tech, onClose }) => {
         <div className="p-6 border-b border-white/10">
           <div className="flex items-start justify-between mb-3">
             <div>
-              <h2 className="font-display font-bold text-xl text-white">{tech.user.name}</h2>
+              <h2 className="font-display font-bold text-xl text-white">{tech.user?.name || 'Unknown Technician'}</h2>
               <p className="text-sm text-white/40 mt-1">{tech.employeeId}</p>
             </div>
             <button onClick={onClose} className="text-white/60 hover:text-white text-2xl">✕</button>
@@ -62,8 +62,8 @@ const TechnicianDetailModal = ({ tech, onClose }) => {
           {/* Contact */}
           <div className="p-3 bg-white/5 rounded-lg space-y-1">
             <p className="text-white/40 text-xs uppercase tracking-wide mb-2">Contact</p>
-            <p className="text-white text-sm">✉️ {tech.user.email}</p>
-            <p className="text-white text-sm">📞 {tech.user.phone}</p>
+            <p className="text-white text-sm">✉️ {tech.user?.email || 'N/A'}</p>
+            <p className="text-white text-sm">📞 {tech.user?.phone || 'N/A'}</p>
           </div>
 
           {/* Location Details */}
@@ -218,10 +218,10 @@ const TechnicianLiveMap = () => {
               >
                 <Popup>
                   <div className="text-sm">
-                    <div className="font-bold text-[#0a0f1e]">{tech.user.name}</div>
+                    <div className="font-bold text-[#0a0f1e]">{tech.user?.name || 'Unknown'}</div>
                     <div className="text-xs text-gray-600">ID: {tech.employeeId}</div>
                     <div className="text-xs text-gray-600">Status: {tech.currentStatus}</div>
-                    <div className="text-xs text-gray-600">⭐ {tech.rating.toFixed(1)}</div>
+                    <div className="text-xs text-gray-600">⭐ {tech.rating?.toFixed(1) || 'N/A'}</div>
                     <button
                       onClick={() => setSelectedTech(tech)}
                       className="mt-2 text-xs bg-blue-500 text-white px-2 py-1 rounded"
@@ -253,8 +253,8 @@ const TechnicianLiveMap = () => {
               <div className="flex items-center gap-3 flex-1">
                 <span className="text-lg">{StatusIcon(tech.currentStatus)}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-white font-medium truncate">{tech.user.name}</div>
-                  <div className="text-xs text-white/40">{tech.employeeId} • ⭐ {tech.rating.toFixed(1)}</div>
+                  <div className="text-white font-medium truncate">{tech.user?.name || 'Unknown Technician'}</div>
+                  <div className="text-xs text-white/40">{tech.employeeId} • ⭐ {tech.rating?.toFixed(1) || 'N/A'}</div>
                 </div>
               </div>
               <div className="text-xs text-white/60 text-right ml-2">
