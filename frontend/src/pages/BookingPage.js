@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import { servicesAPI, bookingsAPI } from '../services/api';
@@ -65,33 +65,50 @@ const MapEvents = ({ onCenterChanged }) => {
   return null;
 };
 
-const MapUpdater = ({ center }) => {
+const MapUpdater = ({ center, flyToken }) => {
   const map = useMap();
+  const lastFlyTokenRef = useRef(flyToken);
+
   useEffect(() => {
     // When the modal opens the map container can be hidden/reshaped.
     // Invalidate size so Leaflet recalculates layout, then set view.
     if (!map) return;
     map.invalidateSize();
+    const shouldFly = flyToken !== lastFlyTokenRef.current;
+    lastFlyTokenRef.current = flyToken;
     const id = setTimeout(() => {
       try {
-        map.setView(center, map.getZoom(), { animate: false });
+        if (shouldFly) {
+          map.flyTo(center, map.getZoom(), { animate: true, duration: 1.2 });
+        } else {
+          map.setView(center, map.getZoom(), { animate: false });
+        }
       } catch (e) {
         // fallback to flyTo if setView fails
         map.flyTo(center, map.getZoom());
       }
     }, 120);
     return () => clearTimeout(id);
-  }, [center, map]);
+  }, [center, flyToken, map]);
   return null;
 };
 
 const LocationPickerModal = ({ open, onClose, onConfirm, initialCenter, geoPermission, onRetryGeolocation }) => {
   const [center, setCenter] = useState(initialCenter || [30.3753, 69.3451]);
+  const [flyToken, setFlyToken] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    if (initialCenter) setCenter(initialCenter);
+    if (initialCenter) {
+      setCenter(initialCenter);
+      setFlyToken(prev => prev + 1);
+    }
   }, [initialCenter]);
+
+  const moveMapTo = (coords, animate = true) => {
+    setCenter(coords);
+    if (animate) setFlyToken(prev => prev + 1);
+  };
 
   if (!open) return null;
 
@@ -104,7 +121,7 @@ const LocationPickerModal = ({ open, onClose, onConfirm, initialCenter, geoPermi
       const data = await res.json();
       toast.dismiss(tId);
       if (data && data.length > 0) {
-        setCenter([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
+        moveMapTo([parseFloat(data[0].lat), parseFloat(data[0].lon)], true);
       } else {
         toast.error('Location not found');
       }
@@ -120,7 +137,7 @@ const LocationPickerModal = ({ open, onClose, onConfirm, initialCenter, geoPermi
     navigator.geolocation.getCurrentPosition(
       pos => {
         toast.dismiss(tId);
-        setCenter([pos.coords.latitude, pos.coords.longitude]);
+        moveMapTo([pos.coords.latitude, pos.coords.longitude], true);
       },
       async (err) => {
         toast.dismiss(tId);
@@ -140,7 +157,7 @@ const LocationPickerModal = ({ open, onClose, onConfirm, initialCenter, geoPermi
           const r = await fetch('https://ipapi.co/json/');
           const j = await r.json();
           if (j && j.latitude && j.longitude) {
-            setCenter([parseFloat(j.latitude), parseFloat(j.longitude)]);
+            moveMapTo([parseFloat(j.latitude), parseFloat(j.longitude)], true);
             toast.success('Approximate location found (IP-based). Move the pin to refine.');
             return;
           }
@@ -149,7 +166,7 @@ const LocationPickerModal = ({ open, onClose, onConfirm, initialCenter, geoPermi
         }
 
         // final fallback: open modal so user can pick
-        setCenter([30.3753, 69.3451]);
+        moveMapTo([30.3753, 69.3451], true);
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
@@ -195,7 +212,7 @@ const LocationPickerModal = ({ open, onClose, onConfirm, initialCenter, geoPermi
         <div className="relative flex-1 bg-white/5">
           <MapContainer center={center} zoom={16} style={{ height: '100%', width: '100%' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <MapUpdater center={center} />
+            <MapUpdater center={center} flyToken={flyToken} />
             <MapEvents onCenterChanged={setCenter} />
           </MapContainer>
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-[400]">
