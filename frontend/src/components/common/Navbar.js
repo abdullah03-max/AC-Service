@@ -73,14 +73,16 @@ const Navbar = () => {
             </div>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            {[['/', 'Home'], ['/services', 'Services']].map(([to, label]) => (
-              <Link key={to} to={to} className={`text-sm font-medium transition-colors relative pb-0.5 ${isActive(to) ? 'text-[#00d4ff]' : 'text-white/60 hover:text-white'}`}>
-                {label}
-                {isActive(to) && <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#00d4ff] rounded-full" />}
-              </Link>
-            ))}
-          </div>
+          {!user && (
+            <div className="hidden md:flex items-center gap-8">
+              {[['/', 'Home'], ['/services', 'Services']].map(([to, label]) => (
+                <Link key={to} to={to} className={`text-sm font-medium transition-colors relative pb-0.5 ${isActive(to) ? 'text-[#00d4ff]' : 'text-white/60 hover:text-white'}`}>
+                  {label}
+                  {isActive(to) && <span className="absolute -bottom-0.5 left-0 right-0 h-px bg-[#00d4ff] rounded-full" />}
+                </Link>
+              ))}
+            </div>
+          )}
 
           <div className="flex items-center gap-3">
             {user ? (
@@ -157,7 +159,10 @@ const Navbar = () => {
         {mobileOpen && (
           <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-[#0a0f1e]/80 backdrop-blur-2xl border-t border-white/10 animate-in slide-in-from-top duration-300">
             <div className="p-4 flex flex-col gap-1 h-full">
-              {[['/', 'Home'], ['/services', 'Services']].map(([to, label]) => (
+              {!user && [
+                ['/', 'Home'],
+                ['/services', 'Services']
+              ].map(([to, label]) => (
                 <Link key={to} to={to} className={`px-4 py-3.5 text-base font-medium rounded-2xl transition-all ${isActive(to) ? 'bg-[#00d4ff]/10 text-[#00d4ff] border border-[#00d4ff]/20' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>{label}</Link>
               ))}
               {user ? (

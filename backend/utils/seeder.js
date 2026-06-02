@@ -12,14 +12,26 @@ const Inventory = require('../models/Inventory');
 
 const services = [
   { name: 'Deep AC Cleaning', category: 'Cleaning', description: 'Complete deep cleaning of AC unit including coils, filters, and drain pipe. Improves efficiency and air quality.', price: 2500, duration: 90, rating: 4.8, totalReviews: 124, bookingCount: 234, tags: ['popular', 'recommended'], isActive: true },
+  { name: 'AC Coil Cleaning', category: 'Cleaning', description: 'Thorough coil cleaning to remove dust and grime for better cooling.', price: 1800, duration: 60, rating: 4.6, totalReviews: 64, bookingCount: 98, tags: ['recommended'], isActive: true },
+  { name: 'Filter Replacement', category: 'Cleaning', description: 'Replace old/blocked AC filters with new standard or HEPA filters.', price: 900, duration: 30, rating: 4.5, totalReviews: 48, bookingCount: 76, tags: [], isActive: true },
   { name: 'AC Gas Charging (R-22)', category: 'Gas Charging', description: 'Refill AC refrigerant gas R-22 to restore cooling performance. Includes leak check.', price: 3500, duration: 60, rating: 4.7, totalReviews: 89, bookingCount: 189, tags: ['popular'], isActive: true },
   { name: 'AC Gas Charging (R-410A)', category: 'Gas Charging', description: 'Environment-friendly R-410A refrigerant refill for modern AC units.', price: 4500, duration: 60, rating: 4.6, totalReviews: 67, bookingCount: 145, tags: [], isActive: true },
+  { name: 'Leak Repair & Gas Refill', category: 'Gas Charging', description: 'Detect and repair refrigerant leaks and recharge with appropriate gas.', price: 4000, duration: 75, rating: 4.6, totalReviews: 52, bookingCount: 88, tags: [], isActive: true },
   { name: 'AC Repair & Diagnosis', category: 'Repair', description: 'Full diagnosis and repair of AC issues including electrical, mechanical, and cooling problems.', price: 1500, duration: 120, rating: 4.5, totalReviews: 203, bookingCount: 312, tags: ['most-booked'], isActive: true },
+  { name: 'Compressor Repair/Replacement', category: 'Repair', description: 'Repair or replace faulty compressor units for AC systems.', price: 6500, duration: 240, rating: 4.4, totalReviews: 32, bookingCount: 54, tags: ['premium'], isActive: true },
+  { name: 'Fan Motor Repair', category: 'Repair', description: 'Repair or replace fan motors in indoor or outdoor units to restore airflow.', price: 2200, duration: 90, rating: 4.5, totalReviews: 41, bookingCount: 73, tags: [], isActive: true },
   { name: 'Split AC Installation', category: 'Installation', description: 'Professional installation of split AC unit including mounting, piping, and electrical connections.', price: 5000, duration: 180, rating: 4.9, totalReviews: 56, bookingCount: 98, tags: ['premium'], isActive: true },
   { name: 'Window AC Installation', category: 'Installation', description: 'Expert installation of window AC with proper sealing and electrical setup.', price: 2000, duration: 90, rating: 4.4, totalReviews: 34, bookingCount: 67, tags: [], isActive: true },
+  { name: 'Ducted System Installation', category: 'Installation', description: 'Installation of centralized ducted AC systems including ductwork and balancing.', price: 20000, duration: 480, rating: 4.7, totalReviews: 18, bookingCount: 22, tags: ['premium'], isActive: true },
   { name: 'Preventive Maintenance', category: 'Maintenance', description: 'Comprehensive preventive maintenance package including cleaning, gas check, and performance test.', price: 3000, duration: 120, rating: 4.7, totalReviews: 78, bookingCount: 156, tags: ['recommended'], isActive: true },
+  { name: 'Seasonal Tune-up', category: 'Maintenance', description: 'Pre-season tune-up to ensure optimal performance and avoid breakdowns.', price: 1600, duration: 75, rating: 4.5, totalReviews: 44, bookingCount: 88, tags: [], isActive: true },
+  { name: 'Emergency Maintenance (On-call)', category: 'Maintenance', description: 'Rapid response maintenance for urgent AC failures (after-hours available).', price: 4500, duration: 120, rating: 4.3, totalReviews: 20, bookingCount: 36, tags: [], isActive: true },
   { name: 'AC Health Inspection', category: 'Inspection', description: 'Thorough AC inspection report with recommendations for maintenance and repairs.', price: 800, duration: 45, rating: 4.6, totalReviews: 45, bookingCount: 89, tags: [], isActive: true },
+  { name: 'Electrical Safety Inspection', category: 'Inspection', description: 'Check electrical wiring, isolators and safety devices to ensure safe operation.', price: 900, duration: 45, rating: 4.5, totalReviews: 27, bookingCount: 41, tags: [], isActive: true },
+  { name: 'Performance Test Inspection', category: 'Inspection', description: 'Measure cooling performance and energy usage, with actionable recommendations.', price: 1200, duration: 60, rating: 4.6, totalReviews: 31, bookingCount: 55, tags: [], isActive: true },
 ];
+
+module.exports = { services };
 
 const inventoryItems = [
   { name: 'AC Air Filter (Standard)', category: 'Filter', description: 'Standard AC filter for split units', quantity: 50, unit: 'piece', minStockLevel: 10, costPrice: 200, sellingPrice: 350, supplier: 'AC Parts Wholesale' },

@@ -33,7 +33,9 @@ const ProtectedRoute = ({ children, roles }) => {
   }
 
   if (!user) {
-    if (roles && roles.includes('admin')) {
+    // If route is admin-only (roles only contains 'admin'), send to admin login.
+    // Otherwise redirect to the public login/register flow.
+    if (roles && roles.length === 1 && roles.includes('admin')) {
       return <Navigate to="/admin/login" replace />;
     }
     return <Navigate to="/login" replace />;

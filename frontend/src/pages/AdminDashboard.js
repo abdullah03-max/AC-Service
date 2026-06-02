@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const COLORS = ['#00d4ff','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4'];
-const TABS = ['Overview','Bookings','Technicians','Users','Live Location','Services','Inventory','Reviews'];
+const TABS = ['Overview','Bookings','Technicians','Users','Live Location','Inventory','Reviews'];
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
