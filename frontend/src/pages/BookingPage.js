@@ -68,7 +68,19 @@ const MapEvents = ({ onCenterChanged }) => {
 const MapUpdater = ({ center }) => {
   const map = useMap();
   useEffect(() => {
-    map.flyTo(center, map.getZoom());
+    // When the modal opens the map container can be hidden/reshaped.
+    // Invalidate size so Leaflet recalculates layout, then set view.
+    if (!map) return;
+    map.invalidateSize();
+    const id = setTimeout(() => {
+      try {
+        map.setView(center, map.getZoom(), { animate: false });
+      } catch (e) {
+        // fallback to flyTo if setView fails
+        map.flyTo(center, map.getZoom());
+      }
+    }, 120);
+    return () => clearTimeout(id);
   }, [center, map]);
   return null;
 };
@@ -186,8 +198,8 @@ const LocationPickerModal = ({ open, onClose, onConfirm, initialCenter, geoPermi
             <MapUpdater center={center} />
             <MapEvents onCenterChanged={setCenter} />
           </MapContainer>
-          <div className="absolute inset-0 pointer-events-none flex items-center justify-center pb-10 z-[400]">
-            <div className="text-4xl filter drop-shadow-xl animate-float">📍</div>
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-[400]">
+            <div className="text-4xl filter drop-shadow-xl animate-float transform -translate-y-6">📍</div>
           </div>
         </div>
         <div className="p-4 border-t border-white/10 bg-[#0a0f1e]">

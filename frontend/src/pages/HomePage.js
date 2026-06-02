@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { servicesAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const CATEGORY_ICONS = {
   Cleaning: '🧹', Repair: '🔧', Installation: '⚡', 'Gas Charging': '❄️', Maintenance: '🛠', Inspection: '🔍'
@@ -10,9 +11,21 @@ const CATEGORY_ICONS = {
 
 const HomePage = () => {
   const [services, setServices] = useState([]);
+  const { user, initializing } = useAuth();
 
   useEffect(() => {
-    servicesAPI.getAll({ active: true }).then(r => setServices(r.data.data.slice(0, 6))).catch(() => {});
+    servicesAPI.getAll({ active: true }).then(r => {
+      const all = r.data.data || [];
+      const categories = ['Cleaning', 'Repair', 'Installation', 'Gas Charging', 'Maintenance', 'Inspection'];
+      let selected = [];
+      categories.forEach(cat => {
+        const items = all.filter(s => s.category === cat).slice(0, 3);
+        selected = selected.concat(items);
+      });
+      // If no categorized items found, fall back to first 18
+      if (selected.length === 0) selected = all.slice(0, 18);
+      setServices(selected);
+    }).catch(() => {});
   }, []);
 
   const stats = [{ v: '5,000+', l: 'Customers Served' }, { v: '50+', l: 'Expert Technicians' }, { v: '8+', l: 'Years Experience' }, { v: '4.9★', l: 'Average Rating' }];
@@ -56,7 +69,9 @@ const HomePage = () => {
                 Book a Service
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </Link>
-              <Link to="/register" className="btn-ghost px-8 py-3 text-base">Create Account</Link>
+              {!user && !initializing && (
+                <Link to="/register" className="btn-ghost px-8 py-3 text-base">Create Account</Link>
+              )}
             </div>
 
             {/* Stats */}
@@ -135,7 +150,7 @@ const HomePage = () => {
                 </div>
               </div>
             )) : (
-              [...Array(6)].map((_, i) => (
+              [...Array(18)].map((_, i) => (
                 <div key={i} className="glass-card p-6 animate-pulse">
                   <div className="w-12 h-12 bg-white/5 rounded-xl mb-4" />
                   <div className="h-5 bg-white/5 rounded mb-2 w-3/4" />
@@ -182,10 +197,12 @@ const HomePage = () => {
             Ready to Book?
           </h2>
           <p className="text-white/40 mb-8 max-w-md mx-auto">Create your free account and get your AC serviced by certified professionals today.</p>
-          <Link to="/register" className="btn-primary px-10 py-3.5 text-base">
-            Get Started Free
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </Link>
+          {!user && !initializing && (
+            <Link to="/register" className="btn-primary px-10 py-3.5 text-base">
+              Get Started Free
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </Link>
+          )}
         </div>
       </section>
 
