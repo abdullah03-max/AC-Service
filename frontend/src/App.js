@@ -61,6 +61,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/home" element={<DashboardRedirect />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
@@ -68,7 +69,6 @@ function AppRoutes() {
       <Route path="/services" element={<ServicesPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/resetpassword/:token" element={<ResetPasswordPage />} />
-      <Route path="/home" element={<DashboardRedirect />} />
 
       <Route path="/dashboard" element={<ProtectedRoute roles={['user']}><UserDashboard /></ProtectedRoute>} />
       <Route path="/book/:serviceId" element={<ProtectedRoute roles={['user','admin']}><BookingPage /></ProtectedRoute>} />

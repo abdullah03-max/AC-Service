@@ -56,14 +56,26 @@ const Navbar = () => {
     return user.role === 'admin' ? '/admin' : user.role === 'technician' ? '/technician' : '/dashboard';
   };
 
-  const handleLogout = () => { logout(); navigate('/'); };
+  const handleLogout = () => {
+    const role = user?.role;
+    logout();
+    navigate(role === 'admin' ? '/admin/login' : '/');
+  };
+
+  const getHomeLink = () => {
+    if (!user) return '/';
+    if (user.role === 'admin') return '/admin';
+    if (user.role === 'technician') return '/technician';
+    return '/dashboard';
+  };
+
   const isActive = (p) => location.pathname === p;
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0a0f1e]/95 border-b border-white/10 backdrop-blur-xl' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2.5 group">
+          <Link to={getHomeLink()} className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl bg-[#00d4ff]/10 border border-[#00d4ff]/30 flex items-center justify-center text-[#00d4ff] group-hover:bg-[#00d4ff]/20 transition-all">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M12 7V4M8 7V5M16 7V5"/><circle cx="12" cy="12" r="2"/><path d="M6 12h2M16 12h2"/></svg>
             </div>

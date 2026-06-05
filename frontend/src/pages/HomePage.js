@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { servicesAPI } from '../services/api';
@@ -27,6 +27,10 @@ const HomePage = () => {
       setServices(selected);
     }).catch(() => {});
   }, []);
+
+  if (!initializing && user?.role === 'admin') {
+    return <Navigate to="/admin" replace />;
+  }
 
   const stats = [{ v: '5,000+', l: 'Customers Served' }, { v: '50+', l: 'Expert Technicians' }, { v: '8+', l: 'Years Experience' }, { v: '4.9★', l: 'Average Rating' }];
   const features = [

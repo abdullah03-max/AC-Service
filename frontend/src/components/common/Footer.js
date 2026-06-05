@@ -22,8 +22,18 @@ const Footer = () => (
         <div>
           <h4 className="font-display font-semibold text-white mb-4 text-sm">Services</h4>
           <ul className="space-y-2">
-            {['AC Cleaning', 'Gas Charging', 'AC Repair', 'Installation', 'Maintenance'].map(s => (
-              <li key={s}><Link to="/services" className="text-sm text-white/40 hover:text-[#00d4ff] transition-colors">{s}</Link></li>
+            {[
+              ['AC Cleaning', 'Cleaning'],
+              ['Gas Charging', 'Gas Charging'],
+              ['AC Repair', 'Repair'],
+              ['Installation', 'Installation'],
+              ['Maintenance', 'Maintenance'],
+            ].map(([label, category]) => (
+              <li key={label}>
+                <Link to={`/services?category=${encodeURIComponent(category)}`} className="text-sm text-white/40 hover:text-[#00d4ff] transition-colors">
+                  {label}
+                </Link>
+              </li>
             ))}
           </ul>
         </div>

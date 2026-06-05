@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { servicesAPI } from '../services/api';
@@ -8,10 +8,18 @@ const CATS = ['All', 'Cleaning', 'Repair', 'Installation', 'Gas Charging', 'Main
 const ICONS = { Cleaning:'🧹', Repair:'🔧', Installation:'⚡', 'Gas Charging':'❄️', Maintenance:'🛠', Inspection:'🔍' };
 
 const ServicesPage = () => {
+  const [searchParams] = useSearchParams();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cat, setCat] = useState('All');
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const category = searchParams.get('category');
+    if (category && CATS.includes(category)) {
+      setCat(category);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     servicesAPI.getAll({ active: true }).then(r => setServices(r.data.data)).catch(()=>{}).finally(()=>setLoading(false));
